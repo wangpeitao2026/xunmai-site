@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寻脉家乡·智传红韵 - 互动探索</title>
+    
+<style>
+:root{--red:#a51d2d;--deep:#7d1421;--gold:#c99a4a;--ink:#292322;--muted:#746d69;--paper:#f6f1e9;--card:#fffdf9;--line:rgba(67,43,34,.12);--shadow:0 20px 60px rgba(54,35,28,.13)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 10%,rgba(201,154,74,.12),transparent 27%),radial-gradient(circle at 85% 20%,rgba(165,29,45,.08),transparent 30%),linear-gradient(135deg,#eee7dd,#faf7f1 55%,#eee5da);min-height:100vh;padding:28px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(rgba(70,45,35,.1) .6px,transparent .6px);background-size:7px 7px}
+.container{position:relative;max-width:1280px;width:100%;margin:auto;background:rgba(255,253,249,.95);border:1px solid rgba(255,255,255,.9);border-radius:28px;box-shadow:var(--shadow);overflow:hidden;backdrop-filter:blur(10px)}
+.header{position:relative;min-height:280px;padding:58px 64px 52px;text-align:left;color:#fff;background:linear-gradient(110deg,rgba(82,9,19,.98),rgba(165,29,45,.94) 58%,rgba(116,17,30,.96));overflow:hidden}
+.header:before{content:"";position:absolute;width:480px;height:480px;right:-130px;top:-250px;border:1px solid rgba(255,255,255,.15);border-radius:50%;box-shadow:0 0 0 38px rgba(255,255,255,.035),0 0 0 78px rgba(255,255,255,.025)}
+.header:after{content:"";position:absolute;left:64px;bottom:28px;width:110px;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.header h1{position:relative;z-index:1;font-family:"STKaiti","KaiTi","Microsoft YaHei",sans-serif;font-size:clamp(2.4rem,5vw,4.5rem);letter-spacing:.08em;line-height:1.05;margin-bottom:18px;text-shadow:0 8px 24px rgba(0,0,0,.2)}
+.header p{position:relative;z-index:1;font-size:1.08rem;letter-spacing:.18em;opacity:.86}
+.main-content{padding:30px 42px 30px}
+.tabs{display:flex;gap:8px;align-items:center;margin:0 0 34px;padding:7px;background:#f1ece4;border:1px solid var(--line);border-radius:16px}
+.tab{position:relative;flex:1;padding:13px 18px;border:0;border-radius:11px;background:transparent;cursor:pointer;font-size:.98rem;color:var(--muted);transition:.25s;font-weight:600}
+.tab:hover{color:var(--red);background:rgba(255,255,255,.6)}
+.tab.active{color:#fff;background:var(--red);box-shadow:0 7px 18px rgba(165,29,45,.2)}
+.tab-content{display:none}.tab-content.active{display:block;animation:fadeIn .45s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.game-intro{max-width:760px;text-align:left;margin:24px auto 34px;padding:8px}
+.game-intro h2,.tab-content>h2{font-family:"STKaiti","KaiTi","Microsoft YaHei",sans-serif;color:var(--red)!important;font-size:2rem;letter-spacing:.06em}
+.game-intro h2{margin-bottom:12px}.game-intro p{color:var(--muted);line-height:1.9}
+.start-btn{display:block;margin:28px auto 10px;background:linear-gradient(135deg,var(--red),var(--deep));color:#fff;border:0;padding:15px 48px;border-radius:999px;font-size:1.05rem;font-weight:700;letter-spacing:.12em;cursor:pointer;box-shadow:0 12px 30px rgba(165,29,45,.25);transition:.25s}
+.start-btn:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(165,29,45,.32)}
+.score-board{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;padding:0;margin-bottom:22px;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:var(--line)}
+.score-item{background:var(--card);padding:18px;text-align:center}.score-item .label{color:var(--muted);font-size:.78rem;letter-spacing:.12em}.score-item .value{color:var(--red);font-size:1.8rem;font-weight:800;margin-top:5px}
+.map-container{position:relative;min-height:520px;padding:30px;margin:20px 0;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:linear-gradient(rgba(255,253,249,.86),rgba(247,239,226,.92)),repeating-linear-gradient(0deg,transparent 0 44px,rgba(165,29,45,.045) 45px 46px),repeating-linear-gradient(90deg,transparent 0 44px,rgba(165,29,45,.045) 45px 46px);box-shadow:0 8px 28px rgba(54,35,28,.08)}
+.map-container:before{content:"长征足迹 · 家乡记忆";position:absolute;left:24px;top:20px;color:rgba(125,20,33,.38);font-size:.78rem;letter-spacing:.2em}
+.location-marker{position:absolute;width:42px;height:42px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid var(--red);border-radius:50%;color:var(--red);font-weight:800;font-size:.82rem;cursor:pointer;box-shadow:0 5px 18px rgba(125,20,33,.18);transition:.25s}
+.location-marker:after{content:"";position:absolute;inset:-7px;border:1px solid rgba(165,29,45,.16);border-radius:50%}
+.location-marker:hover{transform:translate(-50%,-50%) scale(1.14);background:var(--red);color:#fff}.location-marker.discovered{background:var(--gold);border-color:var(--gold);color:#fff}
+.modal{background:rgba(32,22,19,.72);backdrop-filter:blur(7px)}
+.modal-content{background:var(--card);border:1px solid rgba(255,255,255,.9);border-radius:22px;padding:36px;max-width:650px;box-shadow:0 24px 80px rgba(0,0,0,.22)}
+.modal-content h3{color:var(--red);font-family:"STKaiti","KaiTi","Microsoft YaHei",sans-serif;font-size:1.65rem}.modal-content p{color:var(--ink)}
+.close-btn{background:var(--red);border:0;padding:11px 28px;border-radius:999px;font-weight:700;cursor:pointer;transition:.2s}.close-btn:hover{background:var(--deep);transform:translateY(-1px)}
+.knowledge-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:18px}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:25px;box-shadow:0 8px 28px rgba(54,35,28,.08);cursor:pointer;transition:.25s}
+.card:before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:3px;background:linear-gradient(var(--red),var(--gold));border-radius:0 3px 3px 0}
+.card:hover{transform:translateY(-5px);box-shadow:0 16px 38px rgba(54,35,28,.12)}.card h3{color:var(--red);font-size:1.08rem;margin-bottom:10px}.card .location{color:#9a7b52;font-size:.82rem;margin-bottom:12px;letter-spacing:.05em}.card .description{color:#4d4642;line-height:1.85}
+.quiz-container{background:linear-gradient(145deg,#f6f0e7,#fffdf9);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 8px 28px rgba(54,35,28,.08)}
+.question{padding:22px 0;border-bottom:1px solid var(--line);margin-bottom:0}.question h3{color:var(--ink);font-size:1rem;line-height:1.7;margin-bottom:15px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.option{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer;transition:.2s;color:#514a46}.option:hover{border-color:rgba(165,29,45,.45);background:#f7e9e9;transform:translateX(2px)}.option.selected{border-color:var(--red);background:#f7e9e9;color:var(--red);font-weight:700}.option.correct{border-color:#a07a36;background:#f6eddb;color:#7c5a20}.option.wrong{border-color:#c75a63;background:#fae9eb;color:#a51d2d}
+.submit-quiz-btn{background:linear-gradient(135deg,var(--red),var(--deep));color:#fff;border:0;padding:13px 38px;border-radius:999px;font-size:1rem;font-weight:700;cursor:pointer;display:block;margin:25px auto 0;transition:.2s}.submit-quiz-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(165,29,45,.22)}
+.result-message{border-radius:14px;padding:17px;margin-top:20px;font-size:1.05rem}.result-message.success{background:#f4eddd;color:#78551d}.result-message.fail{background:#fae9eb;color:#a51d2d}
+#about>div{max-width:920px;margin:auto;padding:30px!important;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 28px rgba(54,35,28,.08);line-height:1.9!important}
+#about h3{color:var(--red)!important;font-family:"STKaiti","KaiTi","Microsoft YaHei",sans-serif}#about li{margin:7px 0}#about p,#about ul{color:#4d4642}
+@media(max-width:760px){body{padding:10px}.container{border-radius:20px}.header{padding:42px 28px;min-height:230px}.header h1{font-size:2.45rem}.header p{font-size:.9rem;letter-spacing:.1em}.main-content{padding:18px 16px 24px}.tabs{overflow:auto}.tab{min-width:110px;padding:12px 9px;font-size:.86rem}.score-board{grid-template-columns:1fr}.map-container{min-height:430px}.options{grid-template-columns:1fr}#about>div{padding:22px!important}}
+
+/* ===== 全国实践地图升级 ===== */
+.map-container{min-height:680px;padding:26px 26px 30px;background:linear-gradient(180deg,#fbf7ef,#f5ecdf)}
+.map-container:after{content:"30+名成员 · 20+处实践点 · 从家乡出发的红色足迹";position:absolute;right:24px;top:20px;color:rgba(125,20,33,.5);font-size:.76rem;letter-spacing:.14em}
+.map-legend{display:flex;flex-wrap:wrap;gap:9px 16px;align-items:center;margin:4px 0 12px;padding-left:4px;color:#716862;font-size:.79rem}.map-legend span{display:inline-flex;align-items:center;gap:6px}.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block}.legend-dot.red{background:#a51d2d}.legend-dot.gold{background:#c99a4a}.legend-dot.ink{background:#5d514a}
+.map-stage{position:relative;width:100%;aspect-ratio:790/580;display:block;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(201,154,74,.10),transparent 45%),linear-gradient(180deg,#fffdf9,#f6eee2);border:1px solid rgba(67,43,34,.10);box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+.map-stage:before{content:"全国红色文化实践地图";position:absolute;left:22px;bottom:16px;color:rgba(84,64,55,.5);font-family:"STKaiti","KaiTi",serif;font-size:1rem;letter-spacing:.08em;z-index:3}.china-map-image{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;filter:drop-shadow(0 20px 25px rgba(78,50,38,.12));opacity:.97}.route-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}.route-line path{fill:none;stroke:#a51d2d;stroke-width:3;stroke-dasharray:8 8;stroke-linecap:round;opacity:.34}
+.map-pin{position:absolute;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50% 50% 50% 8px;background:linear-gradient(145deg,#a51d2d,#7d1421);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.77rem;cursor:pointer;border:3px solid #fff;box-shadow:0 9px 20px rgba(90,31,35,.24);z-index:5;transition:.22s}.map-pin:hover{transform:translate(-50%,-50%) scale(1.18) rotate(-2deg);box-shadow:0 14px 28px rgba(90,31,35,.28)}.map-pin::after{content:"";position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:#fff;border:2px solid #7d1421}.map-pin.featured{background:linear-gradient(145deg,#c99a4a,#9a7433)}.map-pin.discovered{background:linear-gradient(145deg,#6f8770,#50674f);border-color:#fff}
+.photo-section{margin-top:30px}.photo-section .section-heading{display:flex;justify-content:space-between;gap:16px;align-items:end;margin:0 2px 16px}.photo-section .section-heading h3{font-family:"STKaiti","KaiTi",serif;color:var(--red);font-size:1.55rem}.photo-section .section-heading p{color:var(--muted);font-size:.82rem}.photo-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}.museum-card{grid-column:span 6;background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 12px 30px rgba(54,35,28,.08);transition:.25s}.museum-card:hover{transform:translateY(-5px);box-shadow:0 18px 38px rgba(54,35,28,.12)}.museum-card.featured{grid-column:span 12;display:grid;grid-template-columns:1.15fr 1fr}.museum-photo{position:relative;min-height:220px;background:linear-gradient(135deg,#8b1f2b,#c99a4a);overflow:hidden}.museum-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:.5s}.museum-card:hover .museum-photo img{transform:scale(1.04)}.museum-badge{position:absolute;left:14px;top:14px;background:rgba(255,253,249,.9);border:1px solid rgba(255,255,255,.85);padding:6px 10px;border-radius:999px;font-size:.72rem;color:var(--red);font-weight:800;letter-spacing:.05em;backdrop-filter:blur(6px)}.museum-content{padding:22px 24px 24px}.museum-content h3{font-family:"STKaiti","KaiTi",serif;color:var(--red);font-size:1.35rem;margin-bottom:7px}.museum-location{color:#9a7b52;font-size:.8rem;margin-bottom:10px}.museum-content p{color:#514a46;line-height:1.85;font-size:.9rem}.museum-meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.museum-meta span{font-size:.71rem;color:#6e6158;background:#f4ece1;border:1px solid rgba(67,43,34,.07);padding:5px 8px;border-radius:999px}.photo-credit{margin-top:9px;color:#958a82;font-size:.68rem}.img-placeholder{height:100%;min-height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center;padding:24px;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.16),transparent 35%),linear-gradient(145deg,#6f1622,#b35b40 55%,#c99a4a)}.img-placeholder strong{font-family:"STKaiti","KaiTi",serif;font-size:1.55rem;letter-spacing:.08em}.img-placeholder small{margin-top:8px;opacity:.8}
+@media(max-width:860px){.map-stage{min-height:unset}.china-map-image{width:100%;height:100%}.museum-card,.museum-card.featured{grid-column:span 12;display:block}.museum-photo{min-height:220px}}
+@media(max-width:600px){.map-container{min-height:540px;padding:18px}.map-stage{min-height:unset}.china-map-image{width:100%;height:100%}.map-pin{width:34px;height:34px;font-size:.68rem}.photo-grid{gap:14px}}
+.museum-card.jump-highlight{outline:3px solid rgba(165,29,45,.28);box-shadow:0 18px 48px rgba(165,29,45,.18);transform:translateY(-4px)}
+.museum-card{scroll-margin-top:32px;transition:box-shadow .25s,transform .25s,outline .25s}
+
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div style="position:relative;z-index:1;font-size:.78rem;letter-spacing:.28em;opacity:.72;margin-bottom:18px;">西安交通大学 · 社会实践互动成果</div>
+            <h1>寻脉家乡 · 智传红韵</h1>
+            <p>从家乡出发，沿着红色足迹，重新发现一段属于我们的历史</p>
+        </div>
+
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" data-tab="game">🎮 互动探索</button>
+                <button class="tab" data-tab="knowledge">📚 红色故事</button>
+                <button class="tab" data-tab="quiz">✏️ 知识问答</button>
+                <button class="tab" data-tab="about">ℹ️ 项目介绍</button>
+            </div>
+
+            <!-- 游戏页面 -->
+            <div class="tab-content active" id="game">
+                <div id="start-screen">
+                    <div class="game-intro">
+                        <h2>🗺️ 寻找家乡红色记忆</h2>
+                        <p>点击地图上的标记点，探索各地的红色文化遗址</p>
+                        <p>发现所有地点，了解更多革命历史故事</p>
+                    </div>
+                    <button class="start-btn" onclick="startGame()">开始探索</button>
+                </div>
+
+                <div id="game-container">
+                    <div class="score-board">
+                        <div class="score-item">
+                            <div class="label">已探索</div>
+                            <div class="value" id="discovered-count">0</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="label">总地点</div>
+                            <div class="value">20+</div>
+                        </div>
+                        <div class="score-item">
+                            <div class="label">完成度</div>
+                            <div class="value" id="progress">0%</div>
+                        </div>
+                    </div>
+
+                    <div class="map-container" id="map">
+                        <div class="map-legend"><span><i class="legend-dot red"></i>实践点</span><span><i class="legend-dot gold"></i>重点案例</span><span><i class="legend-dot ink"></i>点击标记查看故事</span></div>
+                        <div class="map-stage" id="map-stage"></div>
+                    </div>
+                    <section class="photo-section">
+                        <div class="section-heading"><div><h3>馆藏与遗址 · 图文走读</h3><p>从建筑、展陈到纪念空间，把“走访”变成可视化的现场记忆。</p></div><div class="museum-meta"><span>实地调研</span><span>案例图文</span><span>数字传播</span></div></div>
+                        <div class="photo-grid" id="museum-photo-grid"></div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- 红色故事页面 -->
+            <div class="tab-content" id="knowledge">
+                <h2 style="text-align: center; color: #e74c3c; margin-bottom: 30px;">📖 家乡红色故事集</h2>
+                <div class="knowledge-cards" id="knowledge-cards">
+                    <!-- 知识卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 知识问答页面 -->
+            <div class="tab-content" id="quiz">
+                <h2 style="text-align: center; color: #e74c3c; margin-bottom: 30px;">🎓 红色文化知识问答</h2>
+                <div class="quiz-container" id="quiz-container">
+                    <!-- 问答题目将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 项目介绍页面 -->
+            <div class="tab-content" id="about">
+                <h2 style="text-align: center; color: #e74c3c; margin-bottom: 30px;">关于我们</h2>
+                <div style="line-height: 1.8; color: #333;">
+                    <h3 style="color: #e74c3c; margin-top: 20px;">📌 项目背景</h3>
+                    <p>本项目由西安交通大学暑期社会实践团队开展，主题为《寻访红色足迹，赓续长征精神——团队成员家乡青少年红色文化认知现状与传播路径调研》。2026年8月，我们回到各自家乡，从身边的红色遗址、纪念空间和真实生活出发，探索青少年红色文化教育的现状与优化路径。</p>
+
+                    <h3 style="color: #e74c3c; margin-top: 20px;">🎯 核心发现</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>学生对长征等宏观历史有基础，但对本地红色史实了解不足</li>
+                        <li>家长认可红色教育价值，但缺少持续可操作的方法</li>
+                        <li>场馆资源丰富，但儿童化讲解和互动体验有提升空间</li>
+                    </ul>
+
+                    <h3 style="color: #e74c3c; margin-top: 20px;">📊 实践规模</h3>
+                    <ul style="padding-left: 20px;">
+                        <li>团队成员：30余人</li>
+                        <li>实践地点：20余处红色文化遗址</li>
+                        <li>问卷调查：512份有效问卷</li>
+                        <li>深度访谈：13组访谈记录</li>
+                        <li>媒体传播：10余则推文，阅读量3万+</li>
+                    </ul>
+
+                    <h3 style="color: #e74c3c; margin-top: 20px;">💡 我们的方案</h3>
+                    <p>通过工业工程的流程分析、供需匹配方法，我们设计了儿童版故事卡、家庭任务单、场馆研学路线图等具体载体，帮助学校、家庭、场馆更好地开展红色文化教育。</p>
+                </div>
+            </div>
+        </div>
+        <div style="padding:18px 42px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;align-items:center;color:#8b8179;font-size:.78rem;letter-spacing:.08em;">
+            <span>寻脉家乡 · 智传红韵</span>
+            <span>以青年视角记录家乡，以数字方式传承记忆</span>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal" id="location-modal">
+        <div class="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-location" style="color: #666; margin-bottom: 15px;"></p>
+            <p id="modal-description" style="line-height: 1.8;"></p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px;">
+                <button class="close-btn" onclick="jumpToPracticeFromModal()">查看实践档案 →</button>
+                <button class="close-btn" style="background:#f1e7da;color:#7d1421;" onclick="closeModal()">知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 地点数据
+        const locations = [
+            {id:1,name:"湘鄂西革命根据地纪念馆",province:"湖北·监利周老嘴",description:"以湘鄂西革命斗争史为主线，串联旧址群、人物故事与地方革命史，是项目重点调研案例之一。",x:63.1,y:70.5,featured:true},
+            {id:2,name:"陇南革命根据地纪念馆",province:"甘肃·陇南",description:"以陇南根据地创建与红军长征相关史迹为展示重点，通过展陈、路线和史料把地方记忆连接起来。",x:50.4,y:60.5,featured:true},
+            {id:3,name:"柳直荀烈士纪念园",province:"湖北·监利周老嘴",description:"围绕柳直荀生平、湘鄂西革命历史与烈士精神展开，是团队调研红色人物叙事与纪念空间传播的重要案例。",x:63.6,y:70.8,featured:true},
+            {id:4,name:"白马关旧址",province:"四川·德阳",description:"古关隘与历史记忆结合，适合从空间体验、历史叙事和研学路线设计角度进行观察。",x:49.3,y:66.9,featured:true},
+            {id:5,name:"湘鄂西革命根据地旧址群",province:"湖北·洪湖瞿家湾",description:"旧址群以连续的历史建筑空间承载红色记忆，适合开展沉浸式走访、场景观察和儿童友好化内容设计。",x:64.3,y:70.5,featured:true},
+            {id:6,name:"红军长征纪念点",province:"贵州",description:"长征历史节点，关注红色故事如何被年轻群体理解、体验与再传播。",x:53.4,y:75.5},
+            {id:7,name:"烈士陵园",province:"江西",description:"革命烈士纪念空间，观察纪念仪式、叙事方式与青少年参与。",x:67.9,y:79.7},
+            {id:8,name:"苏维埃政府旧址",province:"福建",description:"革命政权历史遗址，关注文物空间与教育功能的衔接。",x:69,y:81.7},
+            {id:9,name:"抗战遗址",province:"河北",description:"抗日战争历史场景，关注地方史如何转化为可理解内容。",x:64.8,y:47.8},
+            {id:10,name:"革命烈士故居",province:"湖南",description:"人物故居类红色资源，关注故事化、家庭共学与数字传播。",x:62.4,y:74.9},
+            {id:11,name:"红色教育基地",province:"陕西",description:"开展青少年红色教育的重要场所。",x:56.6,y:58.6},
+            {id:12,name:"革命历史陈列馆",province:"河南",description:"系统展示地方革命历史与革命文物。",x:64.1,y:57.8},
+            {id:13,name:"英雄纪念广场",province:"广东",description:"以纪念空间连接地方英雄故事与公共教育。",x:63.5,y:86.5},
+            {id:14,name:"党史教育馆",province:"浙江",description:"围绕党史学习和红色基因传承开展观察。",x:75.2,y:68.2},
+            {id:15,name:"革命根据地遗址",province:"江苏",description:"观察革命遗址保护与地方文化展示。",x:74.6,y:61.2},
+            {id:16,name:"红色文化村",province:"安徽",description:"从村落空间观察红色文化与地方生活的结合。",x:67.7,y:65.5},
+            {id:17,name:"长征路线纪念点",province:"云南",description:"红军长征相关地点，关注线路化、故事化传播。",x:49,y:76.4},
+            {id:18,name:"革命先烈纪念碑",province:"广西",description:"关注纪念碑、烈士故事与青少年教育场景。",x:52.9,y:84.2},
+            {id:19,name:"红色主题公园",province:"重庆",description:"集纪念、教育与公共活动于一体，观察参与式传播。",x:52.7,y:70.9},
+            {id:20,name:"革命历史纪念馆",province:"山西",description:"以地方革命史展陈为核心，探索展陈内容的儿童友好化。",x:62.5,y:49}
+        ];
+
+        // 问答题目
+        const quizQuestions = [
+            {
+                question: "红军长征开始于哪一年？",
+                options: ["1933年", "1934年", "1935年", "1936年"],
+                correct: 1
+            },
+            {
+                question: "以下哪个不是红军长征途经的省份？",
+                options: ["贵州", "四川", "甘肃", "山东"],
+                correct: 3
+            },
+            {
+                question: "长征的胜利标志着什么？",
+                options: ["抗日战争胜利", "新中国成立", "中国革命转危为安", "改革开放开始"],
+                correct: 2
+            },
+            {
+                question: "湘鄂西革命根据地的主要领导人是？",
+                options: ["毛泽东", "贺龙", "朱德", "周恩来"],
+                correct: 1
+            },
+            {
+                question: "柳直荀烈士牺牲时年仅多少岁？",
+                options: ["28岁", "32岁", "34岁", "38岁"],
+                correct: 2
+            }
+        ];
+
+        let discoveredLocations = new Set();
+        let currentQuizAnswers = [];
+        let currentLocationId = null;
+
+        // 标签页切换
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // 切换标签页样式
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // 切换内容
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(targetTab).classList.add('active');
+
+                // 初始化对应内容
+                if (targetTab === 'knowledge') {
+                    loadKnowledgeCards();
+                } else if (targetTab === 'quiz') {
+                    loadQuiz();
+                }
+            });
+        });
+
+        // 开始游戏
+        function startGame() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            initMap();
+        }
+
+        // 初始化地图
+        function initMap() {
+            const map = document.getElementById('map-stage');
+            map.innerHTML = `<img class="china-map-image" src="china-map.svg" alt="中国省级行政区空白地图"><svg class="route-line" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"><path d="M420 215 C500 240 555 250 625 275 S720 330 760 350"/><path d="M420 215 C375 275 405 335 500 360 S590 420 675 445"/><path d="M420 215 C470 185 540 175 650 170 S745 210 790 255"/></svg>`;
+            locations.forEach(location => {const marker=document.createElement('div');marker.className='map-pin'+(location.featured?' featured':'');marker.style.left=location.x+'%';marker.style.top=location.y+'%';marker.textContent=location.id;marker.dataset.id=location.id;marker.title=location.name;marker.addEventListener('click',()=>discoverLocation(location));map.appendChild(marker);});
+            renderMuseumGallery();
+        }
+
+        function renderMuseumGallery(){
+            const container=document.getElementById('museum-photo-grid'); if(!container||container.children.length)return;
+            const museums=[
+                {id:1,name:'湘鄂西革命根据地纪念馆',location:'湖北·监利周老嘴',img:'cnhubei-1.jpeg',intro:'以旧址、陈列和地方革命史构成完整叙事空间，适合展示“资源端—内容端—体验端”的传播链条。',meta:['旧址群','专题陈列','实地观察'],credit:'图片来源：荆楚网公开报道',featured:true},
+                {id:2,name:'陇南革命根据地纪念馆',location:'甘肃·陇南',img:'sohu-1.jpeg',intro:'馆舍与地方红色历史展陈结合，可从空间动线、史料表达和青少年参观体验角度观察。',meta:['长征记忆','展陈空间','案例比较'],credit:'图片来源：公开报道'},
+                {id:2,name:'陇南根据地纪念馆展厅',location:'甘肃·陇南康县',img:'kxjng-1.jpg',intro:'展厅以地图、照片、文字与历史资料构成视觉叙事，适合作为“展陈如何讲好地方革命故事”的案例。',meta:['展厅','地图叙事','史料传播'],credit:'图片来源：康县陇南根据地纪念馆公开页面'},
+                {id:4,name:'白马关旧址',location:'四川·德阳',img:'pconline-1.jpg',intro:'传统关隘建筑与历史故事结合，能够从空间、标识与游客路径等维度分析红色文化体验。',meta:['旧址','空间叙事','研学路线'],credit:'图片来源：公开摄影页面'},
+                {id:3,name:'柳直荀烈士纪念园',location:'湖北·监利周老嘴',placeholder:true,intro:'这里优先替换为团队现场拍摄的纪念园、雕像、诗词碑或调研合影，更能形成“我们亲自走访”的证据链。',meta:['烈士纪念','人物故事','建议实拍'],credit:'建议使用团队授权现场照片'},
+                {id:5,name:'湘鄂西革命根据地旧址群',location:'湖北·洪湖瞿家湾',img:'https://www.cnhubei.com/xwzt/2024/hshb/hshbagzyjyjd/hshbagzyjyjdjz/202503/W020250222684907814924.jpg',intro:'古镇街巷与革命旧址集中分布，适合展示“走访—观察—记录—传播”的现场实践感。',meta:['旧址群','古镇街巷','沉浸体验'],credit:'图片来源：湖北相关公开报道'}
+            ];
+            museums.forEach((m,idx)=>{const card=document.createElement('article');card.className='museum-card'+(m.featured?' featured':'');card.dataset.locationId=m.id||'';card.id='practice-card-'+(m.id||idx+1);const visual=m.placeholder?`<div class="img-placeholder"><strong>柳直荀烈士纪念园</strong><small>待替换为团队实地照片</small></div>`:`<img src="${m.img}" alt="${m.name}" loading="lazy">`;card.innerHTML=`<div class="museum-photo"><span class="museum-badge">${idx===0?'重点案例':'实践走访'}</span>${visual}</div><div class="museum-content"><h3>${m.name}</h3><div class="museum-location">📍 ${m.location}</div><p>${m.intro}</p><div class="museum-meta">${m.meta.map(x=>`<span>${x}</span>`).join('')}</div><div class="photo-credit">${m.credit}</div></div>`;container.appendChild(card);});
+        }
+
+        // 发现地点
+        function discoverLocation(location) {
+            if (!discoveredLocations.has(location.id)) {
+                discoveredLocations.add(location.id);
+                const marker = document.querySelector(`[data-id="${location.id}"]`);
+                if (marker) marker.classList.add('discovered');
+                updateScore();
+            }
+            currentLocationId = location.id;
+            showLocationDetails(location);
+            // 地图点点击后：自动跳到对应实践档案
+            setTimeout(() => jumpToPractice(location.id), 260);
+        }
+
+        // 显示地点详情
+        function showLocationDetails(location) {
+            currentLocationId = location.id;
+            document.getElementById('modal-title').textContent = location.name;
+            document.getElementById('modal-location').textContent = '📍 ' + location.province;
+            document.getElementById('modal-description').textContent = location.description;
+            document.getElementById('location-modal').classList.add('active');
+        }
+
+        function jumpToPractice(locationId) {
+            const card = document.querySelector(`.museum-card[data-location-id="${locationId}"]`);
+            if (!card) return;
+            document.querySelectorAll('.museum-card.jump-highlight').forEach(el => el.classList.remove('jump-highlight'));
+            // 红色故事卡/照片档案区已经在当前互动页中，直接平滑定位
+            card.classList.add('jump-highlight');
+            card.scrollIntoView({behavior:'smooth', block:'center'});
+            setTimeout(() => card.classList.remove('jump-highlight'), 2400);
+        }
+
+        function jumpToPracticeFromModal() {
+            const id = currentLocationId;
+            closeModal();
+            setTimeout(() => jumpToPractice(id), 120);
+        }
+
+        // 关闭弹窗
+        function closeModal() {
+            document.getElementById('location-modal').classList.remove('active');
+        }
+
+        // 更新分数
+        function updateScore() {
+            const count = discoveredLocations.size;
+            const total = locations.length;
+            const progress = Math.round((count / total) * 100);
+
+            document.getElementById('discovered-count').textContent = count;
+            document.getElementById('progress').textContent = progress + '%';
+
+            if (count === total) {
+                setTimeout(() => {
+                    alert('🎉 恭喜你！已探索完所有地点！\n你对家乡红色文化有了更深的了解！');
+                }, 500);
+            }
+        }
+
+        // 加载知识卡片
+        function loadKnowledgeCards() {
+            const container = document.getElementById('knowledge-cards');
+            if (container.children.length > 0) return; // 已加载
+
+            locations.forEach(location => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <h3>${location.name}</h3>
+                    <div class="location">📍 ${location.province}</div>
+                    <div class="description">${location.description}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // 加载问答
+        function loadQuiz() {
+            const container = document.getElementById('quiz-container');
+            if (container.children.length > 0) return; // 已加载
+
+            currentQuizAnswers = new Array(quizQuestions.length).fill(null);
+
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <h3>${index + 1}. ${q.question}</h3>
+                    <div class="options">
+                        ${q.options.map((opt, optIndex) => `
+                            <div class="option" data-question="${index}" data-option="${optIndex}">
+                                ${String.fromCharCode(65 + optIndex)}. ${opt}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'submit-quiz-btn';
+            submitBtn.textContent = '提交答案';
+            submitBtn.onclick = submitQuiz;
+            container.appendChild(submitBtn);
+
+            // 选项点击事件
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionIndex = parseInt(this.dataset.question);
+                    const optionIndex = parseInt(this.dataset.option);
+
+                    // 清除同一题目的其他选中状态
+                    document.querySelectorAll(`[data-question="${questionIndex}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+
+                    // 选中当前选项
+                    this.classList.add('selected');
+                    currentQuizAnswers[questionIndex] = optionIndex;
+                });
+            });
+        }
+
+        // 提交问答
+        function submitQuiz() {
+            let correctCount = 0;
+
+            quizQuestions.forEach((q, index) => {
+                const userAnswer = currentQuizAnswers[index];
+                const options = document.querySelectorAll(`[data-question="${index}"]`);
+
+                options.forEach((option, optIndex) => {
+                    if (optIndex === q.correct) {
+                        option.classList.add('correct');
+                    }
+                    if (userAnswer === optIndex && userAnswer !== q.correct) {
+                        option.classList.add('wrong');
+                    }
+                });
+
+                if (userAnswer === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const resultDiv = document.createElement('div');
+            const score = Math.round((correctCount / quizQuestions.length) * 100);
+            resultDiv.className = 'result-message ' + (score >= 60 ? 'success' : 'fail');
+            resultDiv.textContent = `您答对了 ${correctCount}/${quizQuestions.length} 题，得分：${score}分！${score >= 60 ? '🎉 优秀！' : '💪 继续加油！'}`;
+
+            const container = document.getElementById('quiz-container');
+            const existingResult = container.querySelector('.result-message');
+            if (existingResult) {
+                existingResult.remove();
+            }
+            container.appendChild(resultDiv);
+
+            // 禁用选项和按钮
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            document.querySelector('.submit-quiz-btn').disabled = true;
+            document.querySelector('.submit-quiz-btn').style.opacity = '0.5';
+        }
+
+        // 点击弹窗外部关闭
+        document.getElementById('location-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
